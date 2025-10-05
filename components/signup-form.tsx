@@ -23,6 +23,7 @@ import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { createClient } from "@/lib/supabase-client"
 
 
 export function SignupForm({
@@ -55,16 +56,25 @@ export function SignupForm({
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
         setLoading(true)
+        const supabase = createClient()
 
         try {
-            // TODO: Implement signup
-            console.log("Signup values:", values)
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 1000))
+            const { data, error } = await supabase.auth.signUp({
+                email: values.email,
+                password: values.password,
+                options: {
+                    data: {
+                        name: values.name,
+                    },
+                },
+            })
+            if (error) {
+                toast.error(error.message)
+            }
+            console.log(data)
             toast.success("Account created successfully!")
             router.push("/sign-in")
         } catch (err) {
-            // TODO: Handle error
             toast.error("Signup failed. Please try again.")
         } finally {
             setLoading(false)

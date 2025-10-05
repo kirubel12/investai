@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import { TrendingUp } from "lucide-react"
 import Link from "next/link";
 import { ModeToggle } from "@/components/toggle-mode";
+import UserButton from "@/components/UserButton";
 
 export function Header() {
     return (
@@ -22,16 +23,7 @@ export function Header() {
 
                 <div className="flex items-center gap-3">
                     <ModeToggle />
-                    <Button variant="ghost" className="hidden sm:inline-flex">
-                        <Link href="/sign-in">
-                            Sign In
-                        </Link>
-                    </Button>
-                    <Button variant="secondary" className="rounded-md bg-primary font-semibold  text-white hover:bg-primary/90">
-                        <Link href="/sign-up">
-                            Get Started
-                        </Link>
-                    </Button>
+                    <UserButton />
                 </div>
             </div>
         </header>
