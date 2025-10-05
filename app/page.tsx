@@ -1,10 +1,19 @@
+'use client'
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { createClient } from "@/lib/supabase";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
-export default async function Page() {
-  const supabase = await createClient()
-  console.log(supabase)
+export default function Page() {
+  const { user, loading } = useAuth()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (user && !loading) {
+      router.push('/dashboard')
+    }
+  }, [user, loading, router])
 
   return (
     <div className="">

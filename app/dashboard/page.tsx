@@ -1,7 +1,19 @@
+"use client"
 import { Header } from '@/components/Header'
 import React from 'react'
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/hooks/useAuth";
 
 const Page = () => {
+    const { user, loading } = useAuth()
+    const router = useRouter()
+
+    useEffect(() => {
+        if (!user && !loading) {
+            router.push('/sign-in')
+        }
+    }, [user, loading, router])
     return (
         <div className="bg-background min-h-screen">
             <Header />

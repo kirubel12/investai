@@ -1,7 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase-client'
-import { User } from '@supabase/supabase-js'
+import React from 'react'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -17,40 +15,18 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from 'react-toastify'
 import { Spinner } from './ui/spinner'
+import { useAuth } from '@/hooks/useAuth'
 
 const UserButton = () => {
-    const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState(true)
+    const { user, loading, signOut } = useAuth()
     const router = useRouter()
-    const supabase = createClient()
-
-    useEffect(() => {
-        // Get initial user
-        const getUser = async () => {
-            const { data: { user } } = await supabase.auth.getUser()
-            setUser(user)
-            setLoading(false)
-        }
-
-        getUser()
-
-        // Listen for auth changes
-        const { data: { subscription } } = supabase.auth.onAuthStateChange(
-            (event, session) => {
-                setUser(session?.user ?? null)
-                setLoading(false)
-            }
-        )
-
-        return () => subscription.unsubscribe()
-    }, [supabase.auth])
 
     const handleSignOut = async () => {
-        try {
-            await supabase.auth.signOut()
+        const result = await signOut()
+        if (result.success) {
             toast.success('Signed out successfully')
             router.push('/')
-        } catch (error) {
+        } else {
             toast.error('Error signing out')
         }
     }
