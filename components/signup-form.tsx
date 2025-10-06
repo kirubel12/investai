@@ -135,6 +135,7 @@ export function SignupForm({
                                                 {form.formState.errors.password.message}
                                             </div>
                                         )}
+
                                     </Field>
                                     <Field>
                                         <FieldLabel htmlFor="confirm-password">
