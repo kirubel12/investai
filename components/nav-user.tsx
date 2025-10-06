@@ -93,10 +93,12 @@ export function NavUser({
 
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <LogOut />
-              Log out
-            </DropdownMenuItem>
+
+              <DropdownMenuItem onClick={signOut}>
+                  <LogOut />
+                  Log out
+              </DropdownMenuItem>
+
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

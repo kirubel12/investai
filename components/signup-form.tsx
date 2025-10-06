@@ -59,19 +59,34 @@ export function SignupForm({
         const supabase = createClient()
 
         try {
-            const { data, error } = await supabase.auth.signUp({
+            const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
                 email: values.email,
                 password: values.password,
                 options: {
-                    data: {
-                        name: values.name,
-                    },
+                    data: { name: values.name },
                 },
-            })
-            if (error) {
-                toast.error(error.message)
+            });
+            if (signUpError) {
+                toast.error(signUpError.message);
+                setLoading(false);
+                return;
             }
-            console.log(data)
+            if (!signUpData?.user) {
+                toast.error("User creation failed.");
+                setLoading(false);
+                return;
+            }
+            const { error: profileError } = await supabase
+                .from('profiles')
+                .insert({
+                    id: signUpData.user.id,
+                    hasdoneonboarding: false,
+                });
+            if (profileError) {
+                toast.error(profileError.message);
+                setLoading(false);
+                return;
+            }
             toast.success("Account created successfully!")
             router.push("/sign-in")
         } catch (err) {
