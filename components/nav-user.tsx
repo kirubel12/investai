@@ -30,11 +30,20 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar"
 import { useAuth } from '@/hooks/useAuth'
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
+import {toast} from "react-toastify";
 export function NavUser({
 
 }) {
   const { isMobile } = useSidebar()
     const {user,signOut,loading} = useAuth();
+    const router = useRouter();
+    const handleLogout = async () => {
+        await signOut();
+        toast.success("Logged out successfully!")
+        router.push('/sign-in');
+    }
     const getInitials = (name: string) => {
         if (!name) return "";
         return name
@@ -94,7 +103,7 @@ export function NavUser({
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
 
-              <DropdownMenuItem onClick={signOut}>
+              <DropdownMenuItem onClick={handleLogout}>
                   <LogOut />
                   Log out
               </DropdownMenuItem>

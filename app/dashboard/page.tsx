@@ -1,3 +1,4 @@
+"use client"
 import { AppSidebar } from "@/components/app-sidebar"
 import {
   Breadcrumb,
@@ -13,8 +14,18 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
+import {useAuth} from "@/hooks/useAuth";
+import {useEffect} from "react";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
+    const { user, loading } = useAuth();
+    const router = useRouter();
+    useEffect(() => {
+        if (!user && !loading) {
+            router.push('/sign-in');
+        }
+    }, [user, loading, router]);
   return (
     <SidebarProvider>
       <AppSidebar />
